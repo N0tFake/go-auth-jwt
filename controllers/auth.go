@@ -24,7 +24,6 @@ func Register(c *gin.Context) {
 	}
 
 	// Generate and save the hash of the password
-	// hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	hash, err := utils.HashPassword(user.Password)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to hash password"})
@@ -53,10 +52,6 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	// if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(input.Password)); err != nil {
-	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid username or password"})
-	// 	return
-	// }
 	if !utils.CheckPasswordHash(input.Password, user.Password) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid username or password"})
 		return
